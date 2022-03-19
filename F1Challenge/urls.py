@@ -16,6 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+import results
+from F1Challenge import views
+from results import views as result_views
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('/', views.landing_page, 'home'),
+    path('leaderboard', result_views.leaderboard, 'leaderboard')
 ]
