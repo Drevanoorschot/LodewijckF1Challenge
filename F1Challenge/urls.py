@@ -22,6 +22,6 @@ from results import views as result_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('/', views.landing_page, 'home'),
-    path('leaderboard', result_views.leaderboard, 'leaderboard')
+    path('', views.landing_page, name='home'),
+    path('leaderboard', result_views.leaderboard, name='leaderboard')
 ]

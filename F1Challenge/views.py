@@ -1,2 +1,6 @@
+from django.shortcuts import redirect
+from django.urls import reverse
+
+
 def landing_page(request):
-    return redic
+    return redirect(reverse('leaderboard'))

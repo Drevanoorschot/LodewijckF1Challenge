@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load f1_filters %}
+{% block title %}
+    Klassement
+{% endblock %}
+{% block content %}
+    <h1>Klassement</h1>
+    <table class="table table-fit">
+        <thead>
+        <tr>
+            <th>Speler</th>
+            <th>Σ</th>
+            {% for gp in grandprixs %}
+                <th>{{ gp.logo }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for player in players %}
+            <tr>
+                <th>{{ player.name }}</th>
+                <th>{{ player.points }}</th>
+                {% for gp in grandprixs %}
+                    <td>{{ predictions|unpack_dict:gp|unpack_dict:player }}</td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
