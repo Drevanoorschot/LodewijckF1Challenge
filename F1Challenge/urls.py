@@ -23,5 +23,10 @@ from results import views as result_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.landing_page, name='home'),
-    path('leaderboard', result_views.leaderboard, name='leaderboard')
+    path('leaderboard', result_views.leaderboard, name='leaderboard'),
+    path('player/<int:p_id>', result_views.player_view, name='player'),
+    path('players', result_views.players_view, name='players'),
+    path('gp/<int:gp_id>', result_views.grandprix_view, name='grandprix'),
+    path('gps', result_views.gps_view, name='gps'),
+    path('stats', result_views.stats_view, name='stats')
 ]

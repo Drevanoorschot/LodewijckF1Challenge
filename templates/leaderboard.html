@@ -5,26 +5,71 @@
 {% endblock %}
 {% block content %}
     <h1>Klassement</h1>
-    <table class="table table-fit">
-        <thead>
-        <tr>
-            <th>Speler</th>
-            <th>Σ</th>
-            {% for gp in grandprixs %}
-                <th>{{ gp.logo }}</th>
-            {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for player in players %}
-            <tr>
-                <th>{{ player.name }}</th>
-                <th>{{ player.points }}</th>
-                {% for gp in grandprixs %}
-                    <td>{{ predictions|unpack_dict:gp|unpack_dict:player }}</td>
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-fit">
+                <thead>
+                <tr>
+                    <th>Speler</th>
+                    <th>Σ</th>
+                    {% for gp in grandprixs %}
+                        <th><a href='{% url 'grandprix' gp.id %}'><i class="fa-solid fa-arrow-up-right-from-square"></i></a><br>{{ gp.logo }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for player in players %}
+                    <tr>
+                        <th>
+                            <a href="{% url 'player' player.id %}">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                            <span style="font-weight: bolder; color: {{ player.colour }}">❚</span>{{ player.name }}
+                        </th>
+                        <th>{{ player.points }}</th>
+                        {% for gp in grandprixs %}
+                            <td>{{ leaderboard|unpack_dict:gp|unpack_dict:player }}</td>
+                        {% endfor %}
+                    </tr>
                 {% endfor %}
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-6">
+            <h1 class="text-center">Score progressie</h1>
+            <canvas id="scoreChart" style="height: 400px"></canvas>
+        </div>
+        <div class="col-3"></div>
+
+    </div>
+    <script>
+        const labels = [{% for l in chart|unpack_dict:'labels' %} '{{ l }}', {% endfor %}]
+
+        const data = {
+            labels: labels,
+            datasets: [
+                    {% for player in chart|unpack_dict:'scores' %}{
+                        label: '{{player.name|shorten}}',
+                        backgroundColor: '{{ player.colour }}',
+                        borderColor: '{{player.colour }}',
+                        data: {{ chart|unpack_dict:'scores'|unpack_dict:player }},
+                        },
+                    {% endfor %}
+            ],
+        };
+
+        const config = {
+            type: 'line',
+            data: data,
+            options: {}
+        };
+
+        const myChart = new Chart(
+            $('#scoreChart'),
+            config
+        );
+    </script>
+
 {% endblock %}

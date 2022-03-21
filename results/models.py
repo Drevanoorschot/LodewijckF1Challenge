@@ -2,9 +2,18 @@ from django.db import models
 
 
 # Create your models here.
+class Nationality(models.Model):
+    name = models.CharField(max_length=50)
+    flag = models.CharField(max_length=5)
+
+    def __str__(self):
+        return f"{self.flag} {self.name}"
+
+
 class Constructor(models.Model):
     name = models.CharField(max_length=100)
     colour = models.CharField(max_length=7)
+    nationality = models.ForeignKey(Nationality, on_delete=models.PROTECT, related_name='country', null=True)
 
     def __str__(self):
         return self.name
@@ -13,7 +22,9 @@ class Constructor(models.Model):
 class Driver(models.Model):
     name = models.CharField(max_length=100)
     number = models.PositiveIntegerField()
-    team = models.ForeignKey(Constructor, on_delete=models.PROTECT)
+    team = models.ForeignKey(Constructor, on_delete=models.PROTECT, related_name='team')
+    short = models.CharField(max_length=3)
+    nationality = models.ForeignKey(Nationality, on_delete=models.PROTECT, related_name='nationality', null=True)
 
     def __str__(self):
         return f"{self.name} ({self.number})"
@@ -26,6 +37,24 @@ class Player(models.Model):
     @property
     def points(self):
         return sum(map(lambda pred: pred.total_points, Prediction.objects.filter(by_player=self)))
+
+    @property
+    def points_dict(self):
+        predictions = Prediction.objects.filter(by_player=self)
+        return {
+            'pole': sum(map(lambda pred: pred.total_points_dict.get('pole'), predictions)),
+            'p1': sum(map(lambda pred: pred.total_points_dict.get('p1'), predictions)),
+            'p2': sum(map(lambda pred: pred.total_points_dict.get('p2'), predictions)),
+            'p3': sum(map(lambda pred: pred.total_points_dict.get('p1'), predictions)),
+            'constructor': sum(map(lambda pred: pred.total_points_dict.get('constructor'), predictions)),
+            'fastest_lap': sum(map(lambda pred: pred.total_points_dict.get('fastest_lap'), predictions)),
+            'sp1': sum(map(lambda pred: pred.total_points_dict.get('sp1') if pred.total_points_dict.get(
+                'sp1') is not None else 0, predictions)),
+            'sp2': sum(map(lambda pred: pred.total_points_dict.get('sp2') if pred.total_points_dict.get(
+                'sp2') is not None else 0, predictions)),
+            'sp3': sum(map(lambda pred: pred.total_points_dict.get('sp3') if pred.total_points_dict.get(
+                'sp3') is not None else 0, predictions)),
+        }
 
     def __str__(self):
         return self.name
@@ -88,9 +117,9 @@ class Prediction(models.Model):
         pred_top3 = [self.p1, self.p2, self.p3]
         for i in range(0, len(result_top3)):
             if result_top3[i] == pred_top3[i]:
-                points[f"p{i}"] = 3
-            elif result_top3[i] in pred_top3:
-                points[f"p{i}"] = 1
+                points[f"p{i + 1}"] = 3
+            elif pred_top3[i] in result_top3:
+                points[f"p{i + 1}"] = 1
         if self.constructor == result.constructor:
             points['constructor'] = 5
         if self.fastest_lap == result.fastest_lap:
@@ -101,7 +130,7 @@ class Prediction(models.Model):
         pred_top3s = [self.sprint_p1, self.sprint_p2, self.sprint_p3]
         for i in range(0, len(result_top3)):
             if result_top3s[i] == pred_top3s[i]:
-                points[f"sp{i}"] = 1
+                points[f"sp{i + 1}"] = 1
         return points
 
     class Meta:

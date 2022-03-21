@@ -5,12 +5,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    <link rel="icon" href="https://i.imgur.com/qWXaHUm.png">
     <title>Lodewijck F1 - {% block title %}{% endblock %}</title>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"
             integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://kit.fontawesome.com/eeb209fc15.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="http://pruimentaart.student.utwente.nl:8080/f1.css">
 
@@ -40,6 +41,15 @@
             <li class="nav-item light">
                 <a class="nav-link text-light" href="{% url 'leaderboard' %}"><i class="fa-solid fa-list"></i>
                     Klassement</a>
+            </li>
+            <li class="nav-item light">
+                <a class="nav-link text-light" href="{% url 'gps' %}"><i class="fa-solid fa-flag-checkered"></i> Grand Prixs</a>
+            </li>
+            <li class="nav-item light">
+                <a class="nav-link text-light" href="{% url 'players' %}"><i class="fa-solid fa-user"></i> Spelers</a>
+            </li>
+            <li class="nav-item light">
+                <a class="nav-link text-light" href="{% url 'stats' %}"><i class="fa-solid fa-chart-column"></i> Stats</a>
             </li>
         </ul>
     </div>

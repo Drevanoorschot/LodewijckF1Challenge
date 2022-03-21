@@ -9,3 +9,8 @@ def unpack_dict(value, val):
     if res is None:
         return "-"
     return res
+
+
+@register.filter(name='shorten')
+def shorten(value):
+    return value[:3].upper()

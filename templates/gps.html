@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load f1_filters %}
+{% block title %}
+    Grand Prixs
+{% endblock %}
+{% block content %}
+    <h1>Grand Prixs</h1>
+    <ul class="list-group">
+
+        {% for gp in gps %}
+            {% if forloop.counter0|divisibleby:4 %}
+                <div class="row">
+            {% endif %}
+        <div class="col-3">
+            <a href="{% url 'grandprix' gp.id %}" class="list-group-item font-weight-bold">{{ gp }}</a>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+            </div>
+        {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}

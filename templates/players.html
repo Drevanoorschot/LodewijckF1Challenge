@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load f1_filters %}
+{% block title %}
+    Spelers
+{% endblock %}
+{% block content %}
+    <h1>Grand Prixs</h1>
+    <ul class="list-group">
+
+        {% for player in players %}
+            {% if forloop.counter0|divisibleby:4 %}
+                <div class="row">
+            {% endif %}
+        <div class="col-3">
+            <a href="{% url 'player' player.id %}" class="list-group-item font-weight-bold"><span
+                    style="font-weight: bolder; color: {{ player.colour }}">❚</span>{{ player.name }} ({{ player.points }})</a>
+        </div>
+        {% if forloop.counter|divisibleby:4 %}
+            </div>
+        {% endif %}
+        {% endfor %}
+    </ul>
+{% endblock %}
