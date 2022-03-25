@@ -4,7 +4,7 @@
     {{ grandprix }}
 {% endblock %}
 {% block content %}
-    <h1>{{ grandprix }} Resultaten</h1>
+    <h1>{{ grandprix }} {% if result_exists %}Resultaten{% else %}Voorspellingen{% endif %}</h1>
     <table class="table table-fit">
         <thead>
         <tr>
@@ -23,6 +23,47 @@
             {% endif %}
         </tr>
         </thead>
+        {% if not result_exists %}
+        <tbody>
+            {% for p in predictions %}
+            <tr>
+                <th>
+                        <span style="font-weight: bolder; color: {{ p.by_player.colour }}">❚</span>{{ p.by_player.name }}
+                    </th>
+                    <td></td>
+                    <td><span
+                            style="font-weight: bolder; color: {{ p.pole.team.colour }}">❚</span>{{ p.pole.short }}
+                    </td>
+                    <td><span
+                            style="font-weight: bolder; color: {{ p.p1.team.colour }}">❚</span>{{ p.p1.short }}
+                    </td>
+                    <td><span
+                            style="font-weight: bolder; color: {{ p.p2.team.colour }}">❚</span>{{ p.p2.short }}
+                    </td>
+                    <td><span
+                            style="font-weight: bolder; color: {{ p.p3.team.colour }}">❚</span>{{ p.p3.short }}
+                    </td>
+                    <td><span
+                            style="font-weight: bolder; color: {{ p.constructor.colour }}">❚</span>{{ p.constructor }}
+                    </td>
+                    <td><span
+                            style="font-weight: bolder; color: {{ p.fastest_lap.team.colour }}">❚</span>{{ p.fastest_lap.short }}
+                    </td>
+                    {% if grandprix.sprint_weekend %}
+                        <td><span
+                                style="font-weight: bolder; color: {{ p.sprint_p1.team.colour }}">❚</span>{{ p.sprint_p1.short }}
+                        </td>
+                        <td><span
+                                style="font-weight: bolder; color: {{ p.sprint_p2.team.colour }}">❚</span>{{ p.sprint_p2.short }}
+                        </td>
+                        <td><span
+                                style="font-weight: bolder; color: {{ p.sprint_p3.team.colour }}">❚</span>{{ p.sprint_p3.short }}
+                        </td>
+                {% endif %}
+            </tr>
+                        {% endfor %}
+        </tbody>
+        {% else %}
         <tbody>
         {% for p in predictions %}
             <tr>
@@ -148,5 +189,6 @@
             </tr>
         {% endfor %}
         </tbody>
+    {% endif %}
     </table>
 {% endblock %}

@@ -9,7 +9,7 @@ def leaderboard(request):
         'leaderboard': _make_leaderboard(),
         'players': sorted(Player.objects.all(), key=lambda x: x.points, reverse=True),
         'grandprixs': GrandPrix.objects.all().order_by('number'),
-        'chart': _make_chart()
+        'chart': _make_chart(),
     })
 
 
@@ -66,7 +66,8 @@ def grandprix_view(request, gp_id):
     predictions = sorted(Prediction.objects.filter(grand_prix=gp), key=lambda pred: pred.total_points, reverse=True)
     return render(request, 'grandprix.html', context={
         'grandprix': gp,
-        'predictions': predictions
+        'predictions': predictions,
+        'result_exists': Prediction.objects.filter(grand_prix=gp, is_result=True)
     })
 
 

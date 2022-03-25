@@ -110,7 +110,10 @@ class Prediction(models.Model):
                 "sp2": 0,
                 "sp3": 0
             })
-        result = Prediction.objects.get(is_result=True, grand_prix=self.grand_prix)
+        results = Prediction.objects.filter(is_result=True, grand_prix=self.grand_prix)
+        if not results.exists():
+            return points
+        result = results[0]
         if self.pole == result.pole:
             points['pole'] = 5
         result_top3 = [result.p1, result.p2, result.p3]
