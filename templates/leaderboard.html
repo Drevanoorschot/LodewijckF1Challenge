@@ -4,6 +4,43 @@
     Klassement
 {% endblock %}
 {% block content %}
+    <script>
+        const offset = 2;
+        const backgrounds = ['#ffda61', '#b7b7b7', '#bb946c'];
+
+
+        function addHighlights() {
+            let tableContent = $('#leaderboardContent');
+            let gpsCount = tableContent.children()[0].children.length;
+            let playerCount = tableContent.children().length;
+            for (let i = offset; i < gpsCount; i++) {
+                let elems = [];
+                for (let j = 0; j < playerCount; j++) {
+                    elems.push(tableContent.children()[j].children[i]);
+                }
+                elems = elems.sort((x,y) => y.innerHTML - x.innerHTML);
+                elems[0].style.background = backgrounds[0];
+                let completed = 0;
+                let pending = 0;
+                let j = 1;
+                for(let x = 1; x < playerCount; x++) {
+                    if(elems[x].innerHTML !== elems[x - 1].innerHTML) {
+                        completed = completed + pending + 1;
+                    } else {
+                        pending++;
+                    }
+                    if(completed === backgrounds.length) {
+                        break;
+                    }
+                    elems[x].style.background = backgrounds[completed]
+                }
+            }
+
+        }
+
+        $(document).ready(addHighlights)
+    </script>
+
     <h1>Klassement</h1>
     <div class="row">
         <div class="col-12">
@@ -13,11 +50,12 @@
                     <th>Speler</th>
                     <th>Σ</th>
                     {% for gp in grandprixs %}
-                        <th><a href='{% url 'grandprix' gp.id %}'><i class="fa-solid fa-arrow-up-right-from-square"></i></a><br>{{ gp.logo }}</th>
+                        <th><a href='{% url 'grandprix' gp.id %}'><i class="fa-solid fa-arrow-up-right-from-square"></i></a><br>{{ gp.logo }}
+                        </th>
                     {% endfor %}
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="leaderboardContent">
                 {% for player in players %}
                     <tr>
                         <th>
