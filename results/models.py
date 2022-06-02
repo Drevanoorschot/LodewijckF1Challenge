@@ -1,3 +1,4 @@
+import numpy
 from django.db import models
 
 
@@ -37,6 +38,14 @@ class Player(models.Model):
     @property
     def points(self):
         return sum(map(lambda pred: pred.total_points, Prediction.objects.filter(by_player=self)))
+
+    @property
+    def points_mean(self):
+        return numpy.mean(list(map(lambda pred: pred.total_points, Prediction.objects.filter(by_player=self))))
+
+    @property
+    def points_std_dev(self):
+        return numpy.std(list(map(lambda pred: pred.total_points, Prediction.objects.filter(by_player=self))))
 
     @property
     def points_dict(self):

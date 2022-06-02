@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
     <script>
-        const offset = 2;
+        const offset = 4;
         const backgrounds = ['#ffda61', '#b7b7b7', '#bb946c'];
 
 
@@ -18,18 +18,18 @@
                 for (let j = 0; j < playerCount; j++) {
                     elems.push(tableContent.children()[j].children[i]);
                 }
-                elems = elems.sort((x,y) => y.innerHTML - x.innerHTML);
+                elems = elems.sort((x, y) => y.innerHTML - x.innerHTML);
                 elems[0].style.background = backgrounds[0];
                 let completed = 0;
                 let pending = 0;
                 let j = 1;
-                for(let x = 1; x < playerCount; x++) {
-                    if(elems[x].innerHTML !== elems[x - 1].innerHTML) {
+                for (let x = 1; x < playerCount; x++) {
+                    if (elems[x].innerHTML !== elems[x - 1].innerHTML) {
                         completed = completed + pending + 1;
                     } else {
                         pending++;
                     }
-                    if(completed === backgrounds.length) {
+                    if (completed === backgrounds.length) {
                         break;
                     }
                     elems[x].style.background = backgrounds[completed]
@@ -49,6 +49,8 @@
                 <tr>
                     <th>Speler</th>
                     <th>Σ</th>
+                    <th>μ</th>
+                    <th>σ</th>
                     {% for gp in grandprixs %}
                         <th><a href='{% url 'grandprix' gp.id %}'><i class="fa-solid fa-arrow-up-right-from-square"></i></a><br>{{ gp.logo }}
                         </th>
@@ -64,6 +66,8 @@
                             <span style="font-weight: bolder; color: {{ player.colour }}">❚</span>{{ player.name }}
                         </th>
                         <th>{{ player.points }}</th>
+                        <th>{{ player.points_mean|floatformat:1 }}</th>
+                        <th>{{ player.points_std_dev|floatformat:1 }}</th>
                         {% for gp in grandprixs %}
                             <td>{{ leaderboard|unpack_dict:gp|unpack_dict:player }}</td>
                         {% endfor %}
