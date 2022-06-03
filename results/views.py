@@ -83,5 +83,4 @@ def players_view(request):
     })
 
 
-def stats_view(request):
-    return render(request, 'stats.html', context={})
+

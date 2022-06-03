@@ -66,8 +66,8 @@
                             <span style="font-weight: bolder; color: {{ player.colour }}">❚</span>{{ player.name }}
                         </th>
                         <th>{{ player.points }}</th>
-                        <th>{{ player.points_mean|floatformat:1 }}</th>
-                        <th>{{ player.points_std_dev|floatformat:1 }}</th>
+                        <td>{{ player.points_mean|floatformat:1 }}</td>
+                        <td>{{ player.points_std_dev|floatformat:1 }}</td>
                         {% for gp in grandprixs %}
                             <td>{{ leaderboard|unpack_dict:gp|unpack_dict:player }}</td>
                         {% endfor %}

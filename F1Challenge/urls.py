@@ -19,6 +19,7 @@ from django.urls import path
 import results
 from F1Challenge import views
 from results import views as result_views
+from stats import views as stats_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +29,5 @@ urlpatterns = [
     path('players', result_views.players_view, name='players'),
     path('gp/<int:gp_id>', result_views.grandprix_view, name='grandprix'),
     path('gps', result_views.gps_view, name='gps'),
-    path('stats', result_views.stats_view, name='stats')
+    path('stats', stats_views.stats_view, name='stats')
 ]
