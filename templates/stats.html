@@ -5,6 +5,7 @@
 {% endblock %}
 {% block content %}
     <h1>Statistieken</h1>
+    <h4 class="font-italic">Na <b>{{ race_count }}</b> races</h4>
     <h2>Speler statistieken</h2>
     <div class="row">
         {% for stat in player_stats %}
@@ -39,6 +40,38 @@
             </div>
         {% endfor %}
     </div>
-    <h2>Voorspelling statistieken</h2>
     <h2>Resultaat statistieken</h2>
+      <div class="row">
+        {% for stat in result_stats %}
+            <div class="col-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Meeste aantal <b>{{ stat.title }}</b></h5>
+                        <div class="row">
+                            <div class="col-9">
+                                <ul class="list-group">
+                                    <li class="list-group-item"><span class="font-weight-bolder">1 | </span><span
+                                            style="font-weight: bolder; color: {{ stat.p1.0.colour }}">❚</span>{{ stat.p1.0.name }}
+                                    </li>
+                                    <li class="list-group-item"><span class="font-weight-bolder">2 | </span><span
+                                            style="font-weight: bolder; color: {{ stat.p2.0.colour }}">❚</span>{{ stat.p2.0.name }}
+                                    </li>
+                                    <li class="list-group-item"><span class="font-weight-bolder">3 | </span><span
+                                            style="font-weight: bolder; color: {{ stat.p3.0.colour }}">❚</span>{{ stat.p3.0.name }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-3">
+                                <ul class="list-group text-center">
+                                    <li class="list-group-item">{{ stat.p1.1 }}</li>
+                                    <li class="list-group-item">{{ stat.p2.1 }}</li>
+                                    <li class="list-group-item">{{ stat.p3.1 }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

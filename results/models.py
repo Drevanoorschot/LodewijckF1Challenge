@@ -27,6 +27,10 @@ class Driver(models.Model):
     short = models.CharField(max_length=3)
     nationality = models.ForeignKey(Nationality, on_delete=models.PROTECT, related_name='nationality', null=True)
 
+    @property
+    def colour(self):
+        return self.team.colour
+
     def __str__(self):
         return f"{self.name} ({self.number})"
 

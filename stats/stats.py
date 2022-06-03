@@ -1,6 +1,6 @@
 from functools import reduce
 
-from results.models import Player, Prediction, GrandPrix
+from results.models import Player, Prediction, GrandPrix, Driver, Constructor
 
 
 class Stat:
@@ -51,9 +51,11 @@ def player_stats() -> list[Stat]:
                 p2s[player] = p2s[player] + 1
             if results.filter(grand_prix=gp).first().p3 == relevant.filter(by_player=player).first().p3:
                 p3s[player] = p3s[player] + 1
-            if results.filter(grand_prix=gp).first().constructor == relevant.filter(by_player=player).first().constructor:
+            if results.filter(grand_prix=gp).first().constructor == relevant.filter(
+                    by_player=player).first().constructor:
                 constructors[player] = constructors[player] + 1
-            if results.filter(grand_prix=gp).first().fastest_lap == relevant.filter(by_player=player).first().fastest_lap:
+            if results.filter(grand_prix=gp).first().fastest_lap == relevant.filter(
+                    by_player=player).first().fastest_lap:
                 fastest_laps[player] = fastest_laps[player] + 1
             if not gp.sprint_weekend:
                 continue
@@ -71,6 +73,37 @@ def player_stats() -> list[Stat]:
     stats.append(create_stat(fastest_laps, "snelste rondes"))
     stats.append(create_stat(sprints, "sprint positites"))
     return stats
+
+
+def result_stats():
+    stats = []
+    results = Prediction.objects.filter(is_result=True)
+    drivers = Driver.objects.all()
+    # 1 most poles
+    # 2 most podiums
+    # 3 most fastest laps
+    poles = dict(map(lambda p: (p, 0), drivers))
+    podiums = dict(map(lambda p: (p, 0), drivers))
+    fastest_laps = dict(map(lambda p: (p, 0), drivers))
+    for driver in drivers:
+        poles[driver] = len(results.filter(pole=driver))
+        podiums[driver] = sum([
+            len(results.filter(p1=driver)),
+            len(results.filter(p2=driver)),
+            len(results.filter(p3=driver))
+        ])
+        fastest_laps[driver] = len(results.filter(fastest_lap=driver))
+    # 4 most constructors
+    constructors = Constructor.objects.all()
+    constructor_wins = dict(map(lambda p: (p, 0), drivers))
+    for constructor in constructors:
+        constructor_wins[constructor] = len(results.filter(constructor=constructor))
+    stats.append(create_stat(poles, "pole positions"))
+    stats.append(create_stat(podiums, "podiums"))
+    stats.append(create_stat(fastest_laps, "snelste rondes"))
+    stats.append(create_stat(constructor_wins, "constructor winsten"))
+    return stats
+
 
 
 def create_stat(stat, title):
