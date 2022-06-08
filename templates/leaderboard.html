@@ -19,11 +19,16 @@
                     elems.push(tableContent.children()[j].children[i]);
                 }
                 elems = elems.sort((x, y) => y.innerHTML - x.innerHTML);
-                elems[0].style.background = backgrounds[0];
+                if (elems[0].innerHTML !== '-') {
+                    elems[0].style.background = backgrounds[0];
+                }
                 let completed = 0;
                 let pending = 0;
                 let j = 1;
                 for (let x = 1; x < playerCount; x++) {
+                    if (elems[x].innerHTML === '-') {
+                        continue
+                    }
                     if (elems[x].innerHTML !== elems[x - 1].innerHTML) {
                         completed = completed + pending + 1;
                     } else {

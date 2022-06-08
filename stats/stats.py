@@ -18,7 +18,7 @@ class Stat:
 def player_stats() -> list[Stat]:
     predictions = Prediction.objects.filter(is_result=False).all()
     results = Prediction.objects.filter(is_result=True).all()
-    gps = GrandPrix.objects.all()
+    gps = list(map(lambda res: res.grand_prix, results))
     players = Player.objects.all()
     stats = []
     # 1 most wins
