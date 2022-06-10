@@ -88,7 +88,6 @@
             <h1 class="text-center">Score progressie</h1>
             <canvas id="scoreChart" style="height: 400px"></canvas>
         </div>
-
     </div>
     <script>
         const labels = [{% for l in chart|unpack_dict:'labels' %} '{{ l }}', {% endfor %}]
