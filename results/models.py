@@ -41,15 +41,21 @@ class Player(models.Model):
 
     @property
     def points(self):
-        return sum(map(lambda pred: pred.total_points, Prediction.objects.filter(by_player=self)))
+        completed_gps = set(map(lambda pred: pred.grand_prix, Prediction.objects.filter(is_result=True)))
+        return sum(map(lambda pred: pred.total_points,
+                       Prediction.objects.filter(by_player=self, grand_prix__in=completed_gps)))
 
     @property
     def points_mean(self):
-        return numpy.mean(list(map(lambda pred: pred.total_points, Prediction.objects.filter(by_player=self))))
+        completed_gps = set(map(lambda pred: pred.grand_prix, Prediction.objects.filter(is_result=True)))
+        return numpy.mean(list(map(lambda pred: pred.total_points,
+                                   Prediction.objects.filter(by_player=self, grand_prix__in=completed_gps))))
 
     @property
     def points_std_dev(self):
-        return numpy.std(list(map(lambda pred: pred.total_points, Prediction.objects.filter(by_player=self))))
+        completed_gps = set(map(lambda pred: pred.grand_prix, Prediction.objects.filter(is_result=True)))
+        return numpy.std(list(map(lambda pred: pred.total_points,
+                                  Prediction.objects.filter(by_player=self, grand_prix__in=completed_gps))))
 
     @property
     def points_dict(self):
@@ -105,7 +111,8 @@ class Prediction(models.Model):
 
     @property
     def total_points(self):
-        return sum(self.total_points_dict.values())
+        return None if not Prediction.objects.filter(is_result=True, grand_prix=self.grand_prix).exists() else sum(
+            self.total_points_dict.values())
 
     @property
     def total_points_dict(self):

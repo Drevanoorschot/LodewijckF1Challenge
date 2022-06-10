@@ -37,7 +37,7 @@ def _make_chart():
         score = []
         for gp in GrandPrix.objects.all().order_by('number'):
             prediction = Prediction.objects.filter(by_player=player, grand_prix=gp)
-            if prediction.exists():
+            if prediction.exists() and prediction[0].total_points is not None:
                 if len(score) == 0:
                     score.append(prediction[0].total_points)
                 else:
@@ -63,7 +63,9 @@ def player_view(request, p_id):
 
 def grandprix_view(request, gp_id):
     gp = GrandPrix.objects.get(id=gp_id)
-    predictions = sorted(Prediction.objects.filter(grand_prix=gp), key=lambda pred: pred.total_points, reverse=True)
+    predictions = Prediction.objects.filter(grand_prix=gp)
+    if Prediction.objects.filter(grand_prix=gp, is_result=True).exists():
+        predictions = sorted(predictions, key=lambda pred: pred.total_points, reverse=True)
     return render(request, 'grandprix.html', context={
         'grandprix': gp,
         'predictions': predictions,
