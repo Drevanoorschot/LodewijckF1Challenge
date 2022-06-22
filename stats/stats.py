@@ -105,7 +105,6 @@ def result_stats():
     return stats
 
 
-
 def create_stat(stat, title):
     stat = sorted(stat.items(), key=lambda i: i[1], reverse=True)
     return Stat(
