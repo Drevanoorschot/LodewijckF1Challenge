@@ -10,7 +10,10 @@
         <tr>
             <th>Speler</th>
             {% if result_exists %}
-                <th class="text-center">Σ</th>{% endif %}
+                <th class="text-center">Σ</th>
+            {% else %}
+                <th></th>
+            {% endif %}
             <th>Pole</th>
             <th>#1</th>
             <th>#2</th>
@@ -31,6 +34,7 @@
                     <th>
                         <span style="font-weight: bolder; color: {{ p.by_player.colour }}">❚</span>{{ p.by_player.name }}
                     </th>
+                    <td></td>
                     <td><span
                             style="font-weight: bolder; color: {{ p.pole.team.colour }}">❚</span>{{ p.pole.short }}
                     </td>
