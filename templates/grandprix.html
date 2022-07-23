@@ -188,24 +188,24 @@
 
                 </tr>
             {% endfor %}
-            <tr class="text-center" style="border-width: 3px 0 0 0; border-style: double">
-                <th>
-                    Stem entropie
-                </th>
-                <td><span class="font-weight-bold">μ</span>={{ grandprix.total_vote_entropy|floatformat:2 }}</td>
-                <td>{{ grandprix.vote_entropy|unpack_dict:"pole"|floatformat:2 }}</td>
-                <td>{{ grandprix.vote_entropy|unpack_dict:"p1"|floatformat:2 }}</td>
-                <td>{{ grandprix.vote_entropy|unpack_dict:"p2"|floatformat:2 }}</td>
-                <td>{{ grandprix.vote_entropy|unpack_dict:"p3"|floatformat:2 }}</td>
-                <td>{{ grandprix.vote_entropy|unpack_dict:"constructor"|floatformat:2 }}</td>
-                <td>{{ grandprix.vote_entropy|unpack_dict:"fastest_lap"|floatformat:2 }}</td>
-                {% if grandprix.sprint_weekend %}
-                    <td>{{ grandprix.vote_entropy|unpack_dict:"sprint_p1"|floatformat:2 }}</td>
-                    <td>{{ grandprix.vote_entropy|unpack_dict:"sprint_p2"|floatformat:2 }}</td>
-                    <td>{{ grandprix.vote_entropy|unpack_dict:"sprint_p3"|floatformat:2 }}</td>
-                {% endif %}
-            </tr>
             </tbody>
         {% endif %}
+        <tr class="text-center" style="border-width: 3px 0 0 0; border-style: double">
+            <th>
+                Stem entropie
+            </th>
+            <td><span class="font-weight-bold">μ</span>={{ grandprix.total_vote_entropy|floatformat:2 }}</td>
+            <td>{{ grandprix.vote_entropy|unpack_dict:"pole"|floatformat:2 }}</td>
+            <td>{{ grandprix.vote_entropy|unpack_dict:"p1"|floatformat:2 }}</td>
+            <td>{{ grandprix.vote_entropy|unpack_dict:"p2"|floatformat:2 }}</td>
+            <td>{{ grandprix.vote_entropy|unpack_dict:"p3"|floatformat:2 }}</td>
+            <td>{{ grandprix.vote_entropy|unpack_dict:"constructor"|floatformat:2 }}</td>
+            <td>{{ grandprix.vote_entropy|unpack_dict:"fastest_lap"|floatformat:2 }}</td>
+            {% if grandprix.sprint_weekend %}
+                <td>{{ grandprix.vote_entropy|unpack_dict:"sprint_p1"|floatformat:2 }}</td>
+                <td>{{ grandprix.vote_entropy|unpack_dict:"sprint_p2"|floatformat:2 }}</td>
+                <td>{{ grandprix.vote_entropy|unpack_dict:"sprint_p3"|floatformat:2 }}</td>
+            {% endif %}
+        </tr>
     </table>
 {% endblock %}

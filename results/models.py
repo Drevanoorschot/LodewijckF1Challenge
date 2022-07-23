@@ -91,6 +91,9 @@ class GrandPrix(models.Model):
 
     @property
     def vote_entropy(self):
+        predictions = Prediction.objects.filter(grand_prix=self, is_result=False)
+        if not predictions.exists():
+            return {"empty": 0}
         cols = ['pole_id',
                 'p1_id',
                 'p2_id',
@@ -101,7 +104,7 @@ class GrandPrix(models.Model):
                 'sprint_p2_id',
                 'sprint_p3_id']
         predictions = pandas.DataFrame.from_records(
-            Prediction.objects.filter(grand_prix=self, is_result=False).values())
+            predictions.values())
         entropy_dict = {}
         for col in cols:
             entropy = stats.entropy(pandas.Series(data=predictions[col]).value_counts())
