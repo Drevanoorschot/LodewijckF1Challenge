@@ -9,7 +9,8 @@
         <thead>
         <tr>
             <th>Speler</th>
-            {% if result_exists %}<th>Σ</th>{% endif %}
+            {% if result_exists %}
+                <th class="text-center">Σ</th>{% endif %}
             <th>Pole</th>
             <th>#1</th>
             <th>#2</th>
@@ -24,136 +25,12 @@
         </tr>
         </thead>
         {% if not result_exists %}
-        <tbody>
+            <tbody>
             {% for p in predictions %}
-            <tr>
-                <th>
-                        <span style="font-weight: bolder; color: {{ p.by_player.colour }}">❚</span>{{ p.by_player.name }}
-                    </th>
-                    <td><span
-                            style="font-weight: bolder; color: {{ p.pole.team.colour }}">❚</span>{{ p.pole.short }}
-                    </td>
-                    <td><span
-                            style="font-weight: bolder; color: {{ p.p1.team.colour }}">❚</span>{{ p.p1.short }}
-                    </td>
-                    <td><span
-                            style="font-weight: bolder; color: {{ p.p2.team.colour }}">❚</span>{{ p.p2.short }}
-                    </td>
-                    <td><span
-                            style="font-weight: bolder; color: {{ p.p3.team.colour }}">❚</span>{{ p.p3.short }}
-                    </td>
-                    <td><span
-                            style="font-weight: bolder; color: {{ p.constructor.colour }}">❚</span>{{ p.constructor }}
-                    </td>
-                    <td><span
-                            style="font-weight: bolder; color: {{ p.fastest_lap.team.colour }}">❚</span>{{ p.fastest_lap.short }}
-                    </td>
-                    {% if grandprix.sprint_weekend %}
-                        <td><span
-                                style="font-weight: bolder; color: {{ p.sprint_p1.team.colour }}">❚</span>{{ p.sprint_p1.short }}
-                        </td>
-                        <td><span
-                                style="font-weight: bolder; color: {{ p.sprint_p2.team.colour }}">❚</span>{{ p.sprint_p2.short }}
-                        </td>
-                        <td><span
-                                style="font-weight: bolder; color: {{ p.sprint_p3.team.colour }}">❚</span>{{ p.sprint_p3.short }}
-                        </td>
-                {% endif %}
-            </tr>
-                        {% endfor %}
-        </tbody>
-        {% else %}
-        <tbody>
-        {% for p in predictions %}
-            <tr>
-                {% if p.by_player is not None %}
+                <tr>
                     <th>
                         <span style="font-weight: bolder; color: {{ p.by_player.colour }}">❚</span>{{ p.by_player.name }}
                     </th>
-                    <td>{{ p.total_points }}</td>
-                    <td class="table-{% if p.total_points_dict|unpack_dict:'pole' > 0 %}success{% else %}danger{% endif %}">
-                    <span style="font-weight: bolder; color: {{ p.pole.team.colour }}">❚</span>{{ p.pole.short }}
-                    {% if p.total_points_dict|unpack_dict:'pole' > 0 %}
-                        (<span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'pole' }}</span>)
-                    {% else %}
-                        (<span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'pole' }}</span>)
-                    {% endif %}
-                </td>
-                <td class="table-{% if p.total_points_dict|unpack_dict:'p1' > 1 %}success{% elif p.total_points_dict|unpack_dict:'p1' > 0 %}warning{% else %}danger{% endif %}">
-                    <span style="font-weight: bolder; color: {{ p.p1.team.colour }}">❚</span>{{ p.p1.short }}
-                    {% if p.total_points_dict|unpack_dict:'p1' > 1 %}
-                        (<span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'p1' }}</span>)
-                    {% elif p.total_points_dict|unpack_dict:'p1' > 0 %}
-                        (<span class="font-weight-bold text-warning">+{{ p.total_points_dict|unpack_dict:'p1' }}</span>)
-                    {% else %}
-                        (<span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'p1' }}</span>)
-                    {% endif %}
-                </td>
-                <td class="table-{% if p.total_points_dict|unpack_dict:'p2' > 1 %}success{% elif p.total_points_dict|unpack_dict:'p2' > 0 %}warning{% else %}danger{% endif %}">
-                    <span style="font-weight: bolder; color: {{ p.p2.team.colour }}">❚</span>{{ p.p2.short }}
-                    {% if p.total_points_dict|unpack_dict:'p2' > 1 %}
-                        (<span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'p2' }}</span>)
-                    {% elif p.total_points_dict|unpack_dict:'p2' > 0 %}
-                        (<span class="font-weight-bold text-warning">+{{ p.total_points_dict|unpack_dict:'p2' }}</span>)
-                    {% else %}
-                        (<span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'p2' }}</span>)
-                    {% endif %}
-                </td>
-                <td class="table-{% if p.total_points_dict|unpack_dict:'p3' > 1 %}success{% elif p.total_points_dict|unpack_dict:'p3' > 0 %}warning{% else %}danger{% endif %}">
-                    <span style="font-weight: bolder; color: {{ p.p3.team.colour }}">❚</span>{{ p.p3.short }}
-                    {% if p.total_points_dict|unpack_dict:'p3' > 1 %}
-                        (<span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'p3' }}</span>)
-                    {% elif p.total_points_dict|unpack_dict:'p3' > 0 %}
-                        (<span class="font-weight-bold text-warning">+{{ p.total_points_dict|unpack_dict:'p3' }}</span>)
-                    {% else %}
-                        (<span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'p3' }}</span>)
-                    {% endif %}
-                </td>
-                <td class="table-{% if p.total_points_dict|unpack_dict:'constructor' > 0 %}success{% else %}danger{% endif %}">
-                    <span style="font-weight: bolder; color: {{ p.constructor.colour }}">❚</span>{{ p.constructor }}
-                    {% if p.total_points_dict|unpack_dict:'constructor' > 0 %}
-                        (<span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'constructor' }}</span>)
-                    {% else %}
-                        (<span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'constructor' }}</span>)
-                    {% endif %}
-                </td>
-                <td class="table-{% if p.total_points_dict|unpack_dict:'fastest_lap' > 0 %}success{% else %}danger{% endif %}">
-                    <span style="font-weight: bolder; color: {{ p.fastest_lap.team.colour }}">❚</span>{{ p.fastest_lap.short }}
-                    {% if p.total_points_dict|unpack_dict:'fastest_lap' > 0 %}
-                        (<span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'fastest_lap' }}</span>)
-                    {% else %}
-                        (<span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'fastest_lap' }}</span>)
-                    {% endif %}
-                </td>
-                {% if p.grand_prix.sprint_weekend %}
-                    <td class="table-{% if p.total_points_dict|unpack_dict:'sp1' > 0 %}success{% else %}danger{% endif %}">
-                        <span style="font-weight: bolder; color: {{ p.sprint_p1.team.colour }}">❚</span>{{ p.sprint_p1.short }}
-                        {% if p.total_points_dict|unpack_dict:'sp1' > 0 %}
-                        (<span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'sp1' }}</span>)
-                    {% else %}
-                        (<span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'sp1' }}</span>)
-                    {% endif %}
-                    </td>
-                    <td class="table-{% if p.total_points_dict|unpack_dict:'sp2' > 0 %}success{% else %}danger{% endif %}">
-                        <span style="font-weight: bolder; color: {{ p.sprint_p2.team.colour }}">❚</span>{{ p.sprint_p2.short }}
-                            {% if p.total_points_dict|unpack_dict:'sp2' > 0 %}
-                        (<span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'sp2' }}</span>)
-                    {% else %}
-                        (<span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'sp2' }}</span>)
-                    {% endif %}
-                    </td>
-                    <td class="table-{% if p.total_points_dict|unpack_dict:'sp3' > 0 %}success{% else %}danger{% endif %}">
-                        <span style="font-weight: bolder; color: {{ p.sprint_p3.team.colour }}">❚</span>{{ p.sprint_p3.short }}
-                            {% if p.total_points_dict|unpack_dict:'sp3' > 0 %}
-                        (<span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'sp3' }}</span>)
-                    {% else %}
-                        (<span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'sp3' }}</span>)
-                    {% endif %}
-                    </td>
-                {% endif %}
-                {% else %}
-                    <th>Resultaat</th>
-                    <td></td>
                     <td><span
                             style="font-weight: bolder; color: {{ p.pole.team.colour }}">❚</span>{{ p.pole.short }}
                     </td>
@@ -183,11 +60,152 @@
                                 style="font-weight: bolder; color: {{ p.sprint_p3.team.colour }}">❚</span>{{ p.sprint_p3.short }}
                         </td>
                     {% endif %}
-                {% endif %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        {% else %}
+            <tbody>
+            {% for p in predictions %}
+                <tr>
+                    {% if p.by_player is not None %}
+                        <th>
+                            <span style="font-weight: bolder; color: {{ p.by_player.colour }}">❚</span>{{ p.by_player.name }}
+                        </th>
+                        <td class="text-center">{{ p.total_points }}</td>
+                        <td class="table-{% if p.total_points_dict|unpack_dict:'pole' > 0 %}success{% else %}danger{% endif %}">
+                            <span style="font-weight: bolder; color: {{ p.pole.team.colour }}">❚</span>{{ p.pole.short }}
+                            {% if p.total_points_dict|unpack_dict:'pole' > 0 %}
+                                <span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'pole' }}</span>
+                            {% else %}
+                                <span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'pole' }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="table-{% if p.total_points_dict|unpack_dict:'p1' > 1 %}success{% elif p.total_points_dict|unpack_dict:'p1' > 0 %}warning{% else %}danger{% endif %}">
+                            <span style="font-weight: bolder; color: {{ p.p1.team.colour }}">❚</span>{{ p.p1.short }}
+                            {% if p.total_points_dict|unpack_dict:'p1' > 1 %}
+                                <span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'p1' }}</span>
+                            {% elif p.total_points_dict|unpack_dict:'p1' > 0 %}
+                                <span class="font-weight-bold text-warning">+{{ p.total_points_dict|unpack_dict:'p1' }}</span>
+                            {% else %}
+                                <span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'p1' }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="table-{% if p.total_points_dict|unpack_dict:'p2' > 1 %}success{% elif p.total_points_dict|unpack_dict:'p2' > 0 %}warning{% else %}danger{% endif %}">
+                            <span style="font-weight: bolder; color: {{ p.p2.team.colour }}">❚</span>{{ p.p2.short }}
+                            {% if p.total_points_dict|unpack_dict:'p2' > 1 %}
+                                <span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'p2' }}</span>
+                            {% elif p.total_points_dict|unpack_dict:'p2' > 0 %}
+                                <span class="font-weight-bold text-warning">+{{ p.total_points_dict|unpack_dict:'p2' }}</span>
+                            {% else %}
+                                <span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'p2' }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="table-{% if p.total_points_dict|unpack_dict:'p3' > 1 %}success{% elif p.total_points_dict|unpack_dict:'p3' > 0 %}warning{% else %}danger{% endif %}">
+                            <span style="font-weight: bolder; color: {{ p.p3.team.colour }}">❚</span>{{ p.p3.short }}
+                            {% if p.total_points_dict|unpack_dict:'p3' > 1 %}
+                                <span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'p3' }}</span>
+                            {% elif p.total_points_dict|unpack_dict:'p3' > 0 %}
+                                <span class="font-weight-bold text-warning">+{{ p.total_points_dict|unpack_dict:'p3' }}</span>
+                            {% else %}
+                                <span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'p3' }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="table-{% if p.total_points_dict|unpack_dict:'constructor' > 0 %}success{% else %}danger{% endif %}">
+                            <span style="font-weight: bolder; color: {{ p.constructor.colour }}">❚</span>{{ p.constructor }}
+                            {% if p.total_points_dict|unpack_dict:'constructor' > 0 %}
+                                <span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'constructor' }}</span>
+                            {% else %}
+                                <span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'constructor' }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="table-{% if p.total_points_dict|unpack_dict:'fastest_lap' > 0 %}success{% else %}danger{% endif %}">
+                            <span style="font-weight: bolder; color: {{ p.fastest_lap.team.colour }}">❚</span>{{ p.fastest_lap.short }}
+                            {% if p.total_points_dict|unpack_dict:'fastest_lap' > 0 %}
+                                <span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'fastest_lap' }}</span>
+                            {% else %}
+                                <span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'fastest_lap' }}</span>
+                            {% endif %}
+                        </td>
+                        {% if p.grand_prix.sprint_weekend %}
+                            <td class="table-{% if p.total_points_dict|unpack_dict:'sp1' > 0 %}success{% else %}danger{% endif %}">
+                                <span style="font-weight: bolder; color: {{ p.sprint_p1.team.colour }}">❚</span>{{ p.sprint_p1.short }}
+                                {% if p.total_points_dict|unpack_dict:'sp1' > 0 %}
+                                    <span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'sp1' }}</span>
+                                {% else %}
+                                    <span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'sp1' }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="table-{% if p.total_points_dict|unpack_dict:'sp2' > 0 %}success{% else %}danger{% endif %}">
+                                <span style="font-weight: bolder; color: {{ p.sprint_p2.team.colour }}">❚</span>{{ p.sprint_p2.short }}
+                                {% if p.total_points_dict|unpack_dict:'sp2' > 0 %}
+                                    <span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'sp2' }}</span>
+                                {% else %}
+                                    <span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'sp2' }}</span>
+                                {% endif %}
+                            </td>
+                            <td class="table-{% if p.total_points_dict|unpack_dict:'sp3' > 0 %}success{% else %}danger{% endif %}">
+                                <span style="font-weight: bolder; color: {{ p.sprint_p3.team.colour }}">❚</span>{{ p.sprint_p3.short }}
+                                {% if p.total_points_dict|unpack_dict:'sp3' > 0 %}
+                                    <span class="font-weight-bold text-success">+{{ p.total_points_dict|unpack_dict:'sp3' }}</span>
+                                {% else %}
+                                    <span class="font-weight-bold text-danger">{{ p.total_points_dict|unpack_dict:'sp3' }}</span>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+                    {% else %}
+                        <th>Resultaat</th>
+                        <td></td>
+                        <td><span
+                                style="font-weight: bolder; color: {{ p.pole.team.colour }}">❚</span>{{ p.pole.short }}
+                        </td>
+                        <td><span
+                                style="font-weight: bolder; color: {{ p.p1.team.colour }}">❚</span>{{ p.p1.short }}
+                        </td>
+                        <td><span
+                                style="font-weight: bolder; color: {{ p.p2.team.colour }}">❚</span>{{ p.p2.short }}
+                        </td>
+                        <td><span
+                                style="font-weight: bolder; color: {{ p.p3.team.colour }}">❚</span>{{ p.p3.short }}
+                        </td>
+                        <td><span
+                                style="font-weight: bolder; color: {{ p.constructor.colour }}">❚</span>{{ p.constructor }}
+                        </td>
+                        <td><span
+                                style="font-weight: bolder; color: {{ p.fastest_lap.team.colour }}">❚</span>{{ p.fastest_lap.short }}
+                        </td>
+                        {% if grandprix.sprint_weekend %}
+                            <td><span
+                                    style="font-weight: bolder; color: {{ p.sprint_p1.team.colour }}">❚</span>{{ p.sprint_p1.short }}
+                            </td>
+                            <td><span
+                                    style="font-weight: bolder; color: {{ p.sprint_p2.team.colour }}">❚</span>{{ p.sprint_p2.short }}
+                            </td>
+                            <td><span
+                                    style="font-weight: bolder; color: {{ p.sprint_p3.team.colour }}">❚</span>{{ p.sprint_p3.short }}
+                            </td>
+                        {% endif %}
+                    {% endif %}
 
+                </tr>
+            {% endfor %}
+            <tr class="text-center" style="border-width: 3px 0 0 0; border-style: double">
+                <th>
+                    Stem entropie
+                </th>
+                <td><span class="font-weight-bold">μ</span>={{ grandprix.total_vote_entropy|floatformat:2 }}</td>
+                <td>{{ grandprix.vote_entropy|unpack_dict:"pole"|floatformat:2 }}</td>
+                <td>{{ grandprix.vote_entropy|unpack_dict:"p1"|floatformat:2 }}</td>
+                <td>{{ grandprix.vote_entropy|unpack_dict:"p2"|floatformat:2 }}</td>
+                <td>{{ grandprix.vote_entropy|unpack_dict:"p3"|floatformat:2 }}</td>
+                <td>{{ grandprix.vote_entropy|unpack_dict:"constructor"|floatformat:2 }}</td>
+                <td>{{ grandprix.vote_entropy|unpack_dict:"fastest_lap"|floatformat:2 }}</td>
+                {% if grandprix.sprint_weekend %}
+                    <td>{{ grandprix.vote_entropy|unpack_dict:"sprint_p1"|floatformat:2 }}</td>
+                    <td>{{ grandprix.vote_entropy|unpack_dict:"sprint_p2"|floatformat:2 }}</td>
+                    <td>{{ grandprix.vote_entropy|unpack_dict:"sprint_p3"|floatformat:2 }}</td>
+                {% endif %}
             </tr>
-        {% endfor %}
-        </tbody>
-    {% endif %}
+            </tbody>
+        {% endif %}
     </table>
 {% endblock %}

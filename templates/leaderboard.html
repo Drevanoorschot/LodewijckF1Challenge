@@ -12,7 +12,7 @@
         function addHighlights() {
             let tableContent = $('#leaderboardContent');
             let gpsCount = tableContent.children()[0].children.length;
-            let playerCount = tableContent.children().length;
+            let playerCount = tableContent.children().length - 1; // substract entropy row;
             for (let i = offset; i < gpsCount; i++) {
                 let elems = [];
                 for (let j = 0; j < playerCount; j++) {
@@ -53,9 +53,20 @@
                 <thead>
                 <tr>
                     <th>Speler</th>
-                    <th>Σ</th>
-                    <th>μ</th>
-                    <th>σ</th>
+                    <th>
+                        <i class="fas fa-info-circle text-primary" data-toggle="tooltip" data-placement="top"
+                           title="Som van alle punten"></i><br>
+                        Σ
+                    </th>
+                    <th>
+                        <i class="fas fa-info-circle text-primary" data-toggle="tooltip" data-placement="top"
+                           title="Gemiddeld aantal punten per grand prix"></i><br>
+                        μ
+                    </th>
+                    <th><i class="fas fa-info-circle text-primary" data-toggle="tooltip" data-placement="top"
+                           title="Standaard deviatie van punten verdeling over de grand prix's"></i><br>
+                        σ
+                    </th>
                     {% for gp in grandprixs %}
                         <th><a href='{% url 'grandprix' gp.id %}'><i class="fa-solid fa-arrow-up-right-from-square"></i></a><br>{{ gp.logo }}
                         </th>
@@ -78,6 +89,16 @@
                         {% endfor %}
                     </tr>
                 {% endfor %}
+                <tr style="border-width: 3px 0 0 0; border-style: double">
+                    <th colspan="4">
+                        Stem entropie
+                        <i class="fas fa-info-circle text-primary" data-toggle="tooltip" data-placement="right"
+                           title="Shannon entropie van stemmen, hoger is meer verschillend gestemd"></i>
+                    </th>
+                    {% for gp in grandprixs %}
+                        <td>{{ gp.total_vote_entropy|floatformat:2 }}</td>
+                    {% endfor %}
+                </tr>
                 </tbody>
             </table>
         </div>

@@ -1,8 +1,12 @@
 import numpy
+import pandas
+
 from django.db import models
 
-
 # Create your models here.
+from scipy import stats
+
+
 class Nationality(models.Model):
     name = models.CharField(max_length=50)
     flag = models.CharField(max_length=5)
@@ -84,6 +88,29 @@ class GrandPrix(models.Model):
     number = models.PositiveIntegerField()
     sprint_weekend = models.BooleanField()
     logo = models.CharField(max_length=5)
+
+    @property
+    def vote_entropy(self):
+        cols = ['pole_id',
+                'p1_id',
+                'p2_id',
+                'p3_id',
+                'constructor_id',
+                'fastest_lap_id',
+                'sprint_p1_id',
+                'sprint_p2_id',
+                'sprint_p3_id']
+        predictions = pandas.DataFrame.from_records(
+            Prediction.objects.filter(grand_prix=self, is_result=False).values())
+        entropy_dict = {}
+        for col in cols:
+            entropy = stats.entropy(pandas.Series(data=predictions[col]).value_counts())
+            entropy_dict.update({col.replace("_id", ""): entropy})
+        return entropy_dict
+
+    @property
+    def total_vote_entropy(self):
+        return numpy.mean(list(self.vote_entropy.values()))
 
     def __str__(self):
         return f"{self.logo} {self.name}"
