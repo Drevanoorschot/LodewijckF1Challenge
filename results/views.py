@@ -11,38 +11,41 @@ from results.models import Player, Prediction, GrandPrix, Driver, Constructor
 
 
 def leaderboard(request):
+    gps = GrandPrix.objects.all().order_by('number')
+    players = Player.objects.all()
+    predictions = Prediction.objects.all()
     return render(request, 'leaderboard.html', context={
-        'leaderboard': _make_leaderboard(),
-        'players': sorted(Player.objects.all(), key=lambda x: x.points, reverse=True),
-        'grandprixs': GrandPrix.objects.all().order_by('number'),
-        'chart': _make_chart(),
+        'leaderboard': _make_leaderboard(gps, players, predictions),
+        'players': sorted(players, key=lambda x: x.points, reverse=True),
+        'grandprixs': gps,
+        'chart': _make_chart(gps, players, predictions),
     })
 
 
-def _make_leaderboard():
+def _make_leaderboard(gps, players, predictions):
     predictions_per_race = {}
-    for gp in GrandPrix.objects.all():
+    for gp in gps:
         predictions_per_race.update({gp: {}})
-        for player in Player.objects.all():
-            if not Prediction.objects.filter(by_player=player, grand_prix=gp).exists():
+        for player in players:
+            if not predictions.filter(by_player=player, grand_prix=gp).exists():
                 continue
-            predictions_per_race[gp].update({player: Prediction.objects.get(
+            predictions_per_race[gp].update({player: predictions.get(
                 by_player=player,
                 grand_prix=gp
             ).total_points})
     return predictions_per_race
 
 
-def _make_chart():
+def _make_chart(gps, players, predictions):
     chart = {}
     chart.update({
-        'labels': list(map(lambda gp: gp.logo, GrandPrix.objects.all())),
+        'labels': list(map(lambda gp: gp.logo, gps)),
         'scores': {}
     })
-    for player in Player.objects.all():
+    for player in players:
         score = []
-        for gp in GrandPrix.objects.all().order_by('number'):
-            prediction = Prediction.objects.filter(by_player=player, grand_prix=gp)
+        for gp in gps:
+            prediction = predictions.filter(by_player=player, grand_prix=gp)
             if prediction.exists() and prediction[0].total_points is not None:
                 if len(score) == 0:
                     score.append(prediction[0].total_points)

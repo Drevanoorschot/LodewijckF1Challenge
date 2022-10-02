@@ -2,6 +2,7 @@ import numpy
 import pandas
 
 from django.db import models
+from django.utils.functional import cached_property
 
 # Create your models here.
 from scipy import stats
@@ -31,7 +32,7 @@ class Driver(models.Model):
     short = models.CharField(max_length=3)
     nationality = models.ForeignKey(Nationality, on_delete=models.PROTECT, related_name='nationality', null=True)
 
-    @property
+    @cached_property
     def colour(self):
         return self.team.colour
 
@@ -43,25 +44,25 @@ class Player(models.Model):
     name = models.CharField(max_length=100)
     colour = models.CharField(max_length=7)
 
-    @property
+    @cached_property
     def points(self):
         completed_gps = set(map(lambda pred: pred.grand_prix, Prediction.objects.filter(is_result=True)))
         return sum(map(lambda pred: pred.total_points,
                        Prediction.objects.filter(by_player=self, grand_prix__in=completed_gps)))
 
-    @property
+    @cached_property
     def points_mean(self):
         completed_gps = set(map(lambda pred: pred.grand_prix, Prediction.objects.filter(is_result=True)))
         return numpy.mean(list(map(lambda pred: pred.total_points,
                                    Prediction.objects.filter(by_player=self, grand_prix__in=completed_gps))))
 
-    @property
+    @cached_property
     def points_std_dev(self):
         completed_gps = set(map(lambda pred: pred.grand_prix, Prediction.objects.filter(is_result=True)))
         return numpy.std(list(map(lambda pred: pred.total_points,
                                   Prediction.objects.filter(by_player=self, grand_prix__in=completed_gps))))
 
-    @property
+    @cached_property
     def points_dict(self):
         predictions = Prediction.objects.filter(by_player=self)
         return {
@@ -89,7 +90,7 @@ class GrandPrix(models.Model):
     sprint_weekend = models.BooleanField()
     logo = models.CharField(max_length=5)
 
-    @property
+    @cached_property
     def vote_entropy(self):
         predictions = Prediction.objects.filter(grand_prix=self, is_result=False)
         if not predictions.exists():
@@ -111,7 +112,7 @@ class GrandPrix(models.Model):
             entropy_dict.update({col.replace("_id", ""): entropy})
         return entropy_dict
 
-    @property
+    @cached_property
     def total_vote_entropy(self):
         return numpy.mean(list(self.vote_entropy.values()))
 
@@ -139,12 +140,12 @@ class Prediction(models.Model):
         else:
             return f"{self.grand_prix} prediction by {self.by_player}"
 
-    @property
+    @cached_property
     def total_points(self):
         return None if not Prediction.objects.filter(is_result=True, grand_prix=self.grand_prix).exists() else sum(
             self.total_points_dict.values())
 
-    @property
+    @cached_property
     def total_points_dict(self):
         points = {
             "pole": 0,
