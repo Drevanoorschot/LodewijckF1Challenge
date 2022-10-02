@@ -43,6 +43,8 @@ def player_stats() -> list[Stat]:
     for gp in gps:
         relevant = predictions.filter(grand_prix=gp).all()
         for player in players:
+            if relevant.filter(by_player=player).first() is None:
+                continue
             if results.filter(grand_prix=gp).first().pole == relevant.filter(by_player=player).first().pole:
                 poles[player] = poles[player] + 1
             if results.filter(grand_prix=gp).first().p1 == relevant.filter(by_player=player).first().p1:
