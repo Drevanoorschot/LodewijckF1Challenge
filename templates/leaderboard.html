@@ -18,14 +18,14 @@
                 for (let j = 0; j < playerCount; j++) {
                     elems.push(tableContent.children()[j].children[i]);
                 }
-                elems = elems.sort((x, y) => y.innerHTML - x.innerHTML);
-                if (elems[0].innerHTML !== '-') {
+                elems = elems.filter(e => e.innerHTML !== '-').sort((x, y) => y.innerHTML - x.innerHTML);
+                if (elems.length > 0 && elems[0].innerHTML !== '-') {
                     elems[0].style.background = backgrounds[0];
                 }
                 let completed = 0;
                 let pending = 0;
                 let j = 1;
-                for (let x = 1; x < playerCount; x++) {
+                for (let x = 1; x < elems.length; x++) {
                     if (elems[x].innerHTML === '-') {
                         continue
                     }
