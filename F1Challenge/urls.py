@@ -30,5 +30,6 @@ urlpatterns = [
     path('gp/<int:gp_id>', result_views.grandprix_view, name='grandprix'),
     path('gps', result_views.gps_view, name='gps'),
     path('stats', stats_views.stats_view, name='stats'),
-    path('csv_upload', result_views.upload_csv, name='csv_upload')
+    path('csv_upload', result_views.upload_csv, name='csv_upload'),
+    path('clear_cache', views.clear_cache, name="clear_cache")
 ]

@@ -122,6 +122,10 @@ STATIC_ROOT = '/static'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+CACHE_MIDDLEWARE_KEY_PREFIX = 'lodewijck_f1'
+
+CACHE_MIDDLEWARE_SECONDS = 3600 * 24 * 14
+
 if not DEBUG:
     CACHES = {
         'default': {

@@ -21,4 +21,11 @@
     <br>
         <button class="btn btn-primary f1-bg--warmRed"><i class="fas fa-upload"></i> Upload</button>
     </form>
+    <br>
+    <a href="{% url 'clear_cache' %}" class="btn btn-primary f1-bg--warmRed"><i class="fas fa-trash-alt"></i> Clear Cache</a>
+    <ul>
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
 {% endblock %}
